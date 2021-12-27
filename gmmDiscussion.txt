@@ -1,0 +1,53 @@
+empirical data from experimenting with number of components M (other values as default):
+	- M=15: 100% accuracy
+	- M=14: 100% accuracy
+	- M=13: 100% accuracy
+	- M=12: 100% accuracy
+	- M=11: 100% accuracy
+	- M=10: 100% accuracy
+	- M=9: 100% accuracy
+	- M=8: 100% accuracy
+	- M=7: 100% accuracy
+	- M=6: 100% accuracy
+	- M=5: 96.875% accuracy
+	- M=4: 100% accuracy
+	- M=3: 100% accuracy
+	- M=2: 96.875% accuracy
+	- M=1: 96.875% accuracy
+
+empirical data experimenting with max training iterations maxIter (other values as default):
+	- maxIter=25: 100% accuracy
+	- maxIter=24: 100% accuracy
+	- maxIter=23: 100% accuracy
+	- maxIter=22: 100% accuracy
+	- maxIter=21: 100% accuracy
+	- maxIter=20: 100% accuracy
+	- maxIter=19: 100% accuracy
+	- maxIter=18: 100% accuracy
+	- maxIter=17: 100% accuracy
+	- maxIter=16: 100% accuracy
+	- maxIter=15: 100% accuracy
+	- maxIter=10: 96.875% accuracy
+	- maxIter=5: 100% accuracy
+	- maxIter=1: 100% accuracy
+
+empirical data experimenting with number of possible speakers S (other values as default):
+	- S=32: 100% accuracy
+	- S=31: 100% accuracy
+	- S=30: 100% accuracy
+	- S=25: 100% accuracy
+	- S=20: 100% accuracy
+	- S=15: 100% accuracy
+	- S=10: 100% accuracy
+	- S=5: 100% accuracy
+	- S=1: 100% accuracy
+
+from the empirical testing data, for M=15 the accuracy is 100% and for M=1 the accuracy is 96.875%. we see that the GMM classification accuracy tends to decrease as the number of components M decreases. this is because with a small M, the distribution may not be representative enough for the data. however, in general, if M is too big, there is a problem with overfitting the model where the likelihood of the data spikes to infinity and the MLE of the GMM becomes ill-defined. when decreasing the max training iterations maxIter, there isn't a significant effect on the classification accuracy since this properly initialized model's likelihood converges extremely quickly. increasing maxIter never decreases the performance of the model. for number of possible speakers S, there is no effect on the classification accuracy when decreasing S from 32 all the way to 1 in this case. performing a train-test cycle with M=1 and maxIter=1, there is still a high classification accuracy of 96.875% because for each utterance, we have a Nxd MFCC matrix where each N entries becomes a training data point, so there is still a lot of data to fit the MLE model to. additional experiment of initializing theta with non-optimal parameters, i.e., non-random covariance matrix or non-uniform initialization of omega over the M components, which causes the classification accuracy to decrease (given the same testing conditions) since it takes the model's likelihood longer to converge.
+
+in general, to improve the classification accuracy of GMMs without adding more training data, we should pick an optimal number of components M, increase max training iterations maxIter, and optimally initialize theta's parameters. also, test on utterances taken from the same speakers under the same experimental setup as those utterances from training.
+
+my classifier would never decide that a given test utterance comes from none of the trained speaker models, as in the test() function, it always picks a speaker from the trained speaker models with the best likelihood of the given test utterance.
+
+since speaker identification is a pattern recognition problem, possible alternative methods of doing speaker idenfication is: HMMs, NNs, spectral density estimation, pattern matching, decision trees, and frequency estimation.
+
+sources: piazza, tutorials, lectures, https://en.wikipedia.org/wiki/Speaker_recognition

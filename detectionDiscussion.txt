@@ -1,0 +1,5 @@
+with a hidden size of 5, the model test accuracy is 0.323. 
+with a hidden size of 10, the model test accuracy is 0.355.
+with a hidden size of 50, the model test accuracy is 0.581.
+
+for all three runs, within each run respectively, the validation accuracy never increased going from epoch 1 to epoch 8. the lack of improvement is because truth/lie detection is a hard task and there is very little data to train on in this case. the implemented model also isn't expressive enough to actually learn from the data.
